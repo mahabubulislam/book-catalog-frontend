@@ -8,6 +8,7 @@ import {
   Flex,
   Image,
   Input,
+  Text,
   VStack,
   useDisclosure
 } from '@chakra-ui/react'
@@ -33,7 +34,9 @@ const Navbar = () => {
       alignItems={'center'}>
       <Flex as={Link} to='/' flex={3} alignItems={'center'}>
         <Image filter={'transparent'} w={12} src={logo} />
-        <h4>My Book</h4>
+        <Text as={'h4'} fontFamily={'cursive'}>
+          BookHaven
+        </Text>
       </Flex>
       <Box flex={2} display={{ base: 'none', md: 'block' }}>
         <Input placeholder='Search books' />
