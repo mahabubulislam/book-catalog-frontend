@@ -19,14 +19,14 @@ const Navbar = () => {
   const NavItems = (
     <>
       <Link to={'/'}>Home</Link>
-      <Link to={'/'}>Sign up</Link>
-      <Link to={'/'}>All Books</Link>
+      <Link to={'/all-books'}>All Books</Link>
+      <Link to={'/login'}>Login</Link>
     </>
   )
   return (
     <Box
       color={'#ffffff'}
-      px={5}
+      px={8}
       py={3}
       bg={'blue.900'}
       display={'flex'}

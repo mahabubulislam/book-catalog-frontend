@@ -18,10 +18,18 @@ const Carousel = () => {
         navigation={true}
         modules={[Autoplay, Navigation]}>
         <SwiperSlide>
-          <Image width={'100%'} height={'596px'} src={carousel1} />
+          <Image
+            width={'100%'}
+            height={{ base: '20vh', md: '60vh' }}
+            src={carousel1}
+          />
         </SwiperSlide>
         <SwiperSlide>
-          <Image width={'100%'} src={carousel2} />
+          <Image
+            width={'100%'}
+            height={{ base: '20vh', md: '60vh' }}
+            src={carousel2}
+          />
         </SwiperSlide>
       </Swiper>
     </Box>
