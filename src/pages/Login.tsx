@@ -44,8 +44,8 @@ const Login = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: userLoginSchema,
-    onSubmit: (values) => {
-      loginUser(values);
+    onSubmit: async (values) => {
+      await loginUser(values);
     }
   });
 

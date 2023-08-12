@@ -42,8 +42,8 @@ const Register = () => {
   const formik = useFormik({
     initialValues,
     validationSchema: userRegistrationSchema,
-    onSubmit: (values) => {
-      register(values);
+    onSubmit: async (values) => {
+      await register(values);
     }
   });
   useEffect(() => {

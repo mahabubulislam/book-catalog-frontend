@@ -46,6 +46,7 @@ const Navbar = () => {
           <MenuItem bg={'blue.900'}>Reading List</MenuItem>
           <MenuItem bg={'blue.900'}>Wish List</MenuItem>
           <MenuItem bg={'blue.900'}>Complete Read</MenuItem>
+          <MenuItem bg={'blue.900'}>Add New Book</MenuItem>
           <MenuItem
             bg={'blue.900'}
             onClick={() => {

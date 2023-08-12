@@ -1,9 +1,10 @@
-import { Box, Grid, GridItem, Text } from '@chakra-ui/react'
-import { IBook } from '../../types/book.interface'
-import BookCard from '../shared/BookCard'
+import { Box, Grid, GridItem, Text } from '@chakra-ui/react';
+import { useGetBooksQuery } from '../../redux/api/bookApi';
+import BookCard from '../shared/BookCard';
 
 const RecentlyAdded = () => {
-  const books: Array<IBook> = [1, 2, 3, 4, 4, 5, 76, 89, 6, 7]
+  const { data, isLoading } = useGetBooksQuery(undefined);
+  const books = isLoading ? [] : data;
   return (
     <Box>
       <Text as={'h4'} fontSize={'3xl'} fontWeight={'bold'} mb={5}>
@@ -13,17 +14,17 @@ const RecentlyAdded = () => {
         templateColumns={{
           base: 'repeat(1, 1fr)',
           md: 'repeat(2, 1fr)',
-          xl: 'repeat(4, 1fr)'
+          xl: 'repeat(5, 1fr)'
         }}
         gap={6}>
-        {books.map((book) => (
+        {books?.map((book) => (
           <GridItem>
             <BookCard book={book} key={book._id} />
           </GridItem>
         ))}
       </Grid>
     </Box>
-  )
-}
+  );
+};
 
-export default RecentlyAdded
+export default RecentlyAdded;
