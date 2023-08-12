@@ -7,8 +7,10 @@ import {
   Text
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { Link } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
+import { useLoginUserMutation } from '../redux/api/userApi';
 import { saveUser } from '../redux/features/userSlice';
 import { useAppDispatch } from '../redux/hooks';
 interface IUserLogin {
@@ -17,6 +19,8 @@ interface IUserLogin {
 }
 const Login = () => {
   const dispatch = useAppDispatch();
+  const [loginUser, { data, isLoading }] = useLoginUserMutation();
+  const navigate = useNavigate();
   const initialValues: IUserLogin = {
     email: '',
     password: ''
@@ -27,15 +31,24 @@ const Login = () => {
       .min(6, 'Password must be at least 6 characters!')
       .required('Password is required')
   });
+  useEffect(() => {
+    if (data?.success) {
+      const { token, user } = data.data;
+      localStorage.setItem('token', token);
+      dispatch(saveUser(user));
+      navigate('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
+
   const formik = useFormik({
     initialValues,
     validationSchema: userLoginSchema,
     onSubmit: (values) => {
-      const data = { ...values, name: 'Mahbub' };
-      dispatch(saveUser(data));
-      alert(JSON.stringify(values, null, 2));
+      loginUser(values);
     }
   });
+
   return (
     <Container h={'80vh'} alignItems={'center'} display={'flex'}>
       <FormControl as={'section'} boxShadow={'xl'} p={10} rounded={'md'}>
@@ -82,7 +95,7 @@ const Login = () => {
               Register here
             </Text>
           </Text>
-          <Button mt={4} colorScheme='teal' type='submit'>
+          <Button isLoading={isLoading} mt={4} colorScheme='teal' type='submit'>
             Login
           </Button>
         </form>

@@ -1,5 +1,6 @@
-import { HamburgerIcon } from '@chakra-ui/icons'
+import { ChevronDownIcon, HamburgerIcon } from '@chakra-ui/icons';
 import {
+  Avatar,
   Box,
   Drawer,
   DrawerBody,
@@ -8,21 +9,55 @@ import {
   Flex,
   Image,
   Input,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Text,
   VStack,
   useDisclosure
-} from '@chakra-ui/react'
-import { Link } from 'react-router-dom'
-import logo from '../../assets/img/logo.png'
+} from '@chakra-ui/react';
+import { Link, useNavigate } from 'react-router-dom';
+import logo from '../../assets/img/logo.png';
+import { useAppSelector } from '../../redux/hooks';
 const Navbar = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const navigate = useNavigate();
+  const { name, email } = useAppSelector((state) => state.user);
+  const token = localStorage.getItem('token');
   const NavItems = (
     <>
       <Link to={'/'}>Home</Link>
       <Link to={'/all-books'}>All Books</Link>
-      <Link to={'/login'}>Login</Link>
+      {!token && <Link to={'/login'}>Login</Link>}
     </>
-  )
+  );
+  const MenuBar = (
+    <Box ml={5}>
+      <Menu>
+        <MenuButton title={email}>
+          <Flex alignItems={'center'}>
+            <Avatar size={{ base: 'sm', md: 'md' }} name={name} />
+
+            <ChevronDownIcon />
+          </Flex>
+        </MenuButton>
+        <MenuList zIndex={9999} bg={'blue.900'}>
+          <MenuItem bg={'blue.900'}>Reading List</MenuItem>
+          <MenuItem bg={'blue.900'}>Wish List</MenuItem>
+          <MenuItem bg={'blue.900'}>Complete Read</MenuItem>
+          <MenuItem
+            bg={'blue.900'}
+            onClick={() => {
+              localStorage.removeItem('token');
+              navigate('/login');
+            }}>
+            Logout
+          </MenuItem>
+        </MenuList>
+      </Menu>
+    </Box>
+  );
   return (
     <Box
       color={'#ffffff'}
@@ -50,6 +85,7 @@ const Navbar = () => {
         {NavItems}
       </Flex>
       <HamburgerIcon display={{ base: 'block', md: 'none' }} onClick={onOpen} />
+      {token && MenuBar}
       <Drawer placement={'top'} onClose={onClose} isOpen={isOpen}>
         <DrawerOverlay />
         <DrawerContent bg={'blue.900'}>
@@ -62,7 +98,7 @@ const Navbar = () => {
         </DrawerContent>
       </Drawer>
     </Box>
-  )
-}
+  );
+};
 
-export default Navbar
+export default Navbar;

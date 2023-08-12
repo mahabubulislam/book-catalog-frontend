@@ -7,6 +7,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useRegisterUserMutation } from '../redux/api/userApi';
@@ -43,12 +44,17 @@ const Register = () => {
     validationSchema: userRegistrationSchema,
     onSubmit: (values) => {
       register(values);
-      if (data.success) {
-        dispatch(saveUser(data.data.rest));
-        navigate('/');
-      }
     }
   });
+  useEffect(() => {
+    if (data?.success) {
+      const { token, user } = data.data;
+      localStorage.setItem('token', token);
+      dispatch(saveUser(user));
+      navigate('/');
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoading]);
   return (
     <Container h={'80vh'} alignItems={'center'} display={'flex'}>
       <FormControl as={'section'} boxShadow={'xl'} p={10} rounded={'md'}>
