@@ -8,8 +8,12 @@ export const bookApi = createApi({
     getBooks: builder.query({
       query: () => '/books',
       transformResponse: (response: { data: Array<IBook> }) => response.data
+    }),
+    getSingleBook: builder.query({
+      query: (id) => `/books/${id}`,
+      transformResponse: (response: { data: IBook }) => response.data
     })
   })
 });
 
-export const { useGetBooksQuery } = bookApi;
+export const { useGetBooksQuery, useGetSingleBookQuery } = bookApi;

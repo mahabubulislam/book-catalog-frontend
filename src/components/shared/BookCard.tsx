@@ -1,3 +1,4 @@
+import { SmallAddIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Button,
   ButtonGroup,
@@ -9,17 +10,18 @@ import {
   Stack,
   Text
 } from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
 import { IBook } from '../../types/book.interface';
 interface IProps {
   book: IBook;
 }
 const BookCard = ({ book }: IProps) => {
-  const { title, img, genre, author, publicationDate } = book;
+  const { title, img, genre, author, publicationDate, _id } = book;
   return (
-    <Card maxW='xs'>
+    <Card maxW='xs' h={'470px'}>
       <CardBody pb={0}>
         <Image
-          w={'md'}
+          w={'50%'}
           src={img}
           alt={title}
           borderRadius='lg'
@@ -36,13 +38,20 @@ const BookCard = ({ book }: IProps) => {
           </Text>
         </Stack>
       </CardBody>
-
       <CardFooter>
         <ButtonGroup spacing='2'>
-          <Button variant='solid' colorScheme='blue'>
-            Read now
+          <Button
+            rightIcon={<ViewIcon />}
+            as={Link}
+            to={`/books/${_id}`}
+            variant='outline'
+            colorScheme='blue'>
+            Details
           </Button>
-          <Button variant='ghost' colorScheme='blue'>
+          <Button
+            rightIcon={<SmallAddIcon />}
+            variant='outline'
+            colorScheme='blue'>
             Add to Wishlist
           </Button>
         </ButtonGroup>

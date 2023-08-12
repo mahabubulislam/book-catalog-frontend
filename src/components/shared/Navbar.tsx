@@ -19,12 +19,13 @@ import {
 } from '@chakra-ui/react';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';
+import useToken from '../../hooks/useToken';
 import { useAppSelector } from '../../redux/hooks';
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
-  const { name, email } = useAppSelector((state) => state.user);
-  const token = localStorage.getItem('token');
+  const { user } = useAppSelector((state) => state.user);
+  const token = useToken();
   const NavItems = (
     <>
       <Link to={'/'}>Home</Link>
@@ -35,9 +36,9 @@ const Navbar = () => {
   const MenuBar = (
     <Box ml={5}>
       <Menu>
-        <MenuButton title={email}>
+        <MenuButton title={user?.email}>
           <Flex alignItems={'center'}>
-            <Avatar size={{ base: 'sm', md: 'md' }} name={name} />
+            <Avatar size={{ base: 'sm', md: 'md' }} name={user?.name} />
 
             <ChevronDownIcon />
           </Flex>
