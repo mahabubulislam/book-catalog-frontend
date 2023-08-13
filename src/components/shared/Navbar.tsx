@@ -20,11 +20,13 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../../assets/img/logo.png';
 import useToken from '../../hooks/useToken';
-import { useAppSelector } from '../../redux/hooks';
+import { saveSearchBook } from '../../redux/features/bookSlice';
+import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 const Navbar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const navigate = useNavigate();
   const { user } = useAppSelector((state) => state.user);
+  const dispatch = useAppDispatch();
   const token = useToken();
   const NavItems = (
     <>
@@ -76,7 +78,10 @@ const Navbar = () => {
         </Text>
       </Flex>
       <Box flex={2} display={{ base: 'none', md: 'block' }}>
-        <Input placeholder='Search books' />
+        <Input
+          placeholder='Search books'
+          onChange={(e) => dispatch(saveSearchBook(e.target.value))}
+        />
       </Box>
       <Flex
         display={{ base: 'none', md: 'flex' }}

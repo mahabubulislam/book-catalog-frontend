@@ -6,7 +6,8 @@ export const bookApi = createApi({
   baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api' }),
   endpoints: (builder) => ({
     getBooks: builder.query({
-      query: () => '/books',
+      query: ({ book, sortBy }) =>
+        `/books?searchTerm=${book ? book : ''}${sortBy ? `&${sortBy}` : ''}`,
       transformResponse: (response: { data: Array<IBook> }) => response.data
     }),
     getSingleBook: builder.query({
