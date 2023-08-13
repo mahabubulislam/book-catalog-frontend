@@ -12,8 +12,15 @@ export const bookApi = createApi({
     getSingleBook: builder.query({
       query: (id) => `/books/${id}`,
       transformResponse: (response: { data: IBook }) => response.data
+    }),
+    deleteBook: builder.mutation({
+      query: (id) => ({ url: `/books/${id}`, method: 'DELETE' })
     })
   })
 });
 
-export const { useGetBooksQuery, useGetSingleBookQuery } = bookApi;
+export const {
+  useGetBooksQuery,
+  useGetSingleBookQuery,
+  useDeleteBookMutation
+} = bookApi;

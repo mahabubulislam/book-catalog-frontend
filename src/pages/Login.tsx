@@ -7,7 +7,7 @@ import {
   Text
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useLoginUserMutation } from '../redux/api/userApi';
@@ -17,9 +17,14 @@ interface IUserLogin {
   email: string;
   password: string;
 }
+interface ErrorResponse {
+  message: string;
+}
 const Login = () => {
   const dispatch = useAppDispatch();
-  const [loginUser, { data, isLoading }] = useLoginUserMutation();
+  const [errorMessage, setErrorMessage] = useState('');
+  const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
+  const { message } = (error as ErrorResponse) || {};
   const navigate = useNavigate();
   const initialValues: IUserLogin = {
     email: '',
@@ -37,6 +42,9 @@ const Login = () => {
       localStorage.setItem('token', token);
       dispatch(saveUser(user));
       navigate('/');
+    }
+    if (error) {
+      setErrorMessage(message);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoading]);
@@ -95,6 +103,8 @@ const Login = () => {
               Register here
             </Text>
           </Text>
+
+          {error && <Text color={'red.500'}>{errorMessage}</Text>}
           <Button isLoading={isLoading} mt={4} colorScheme='teal' type='submit'>
             Login
           </Button>
