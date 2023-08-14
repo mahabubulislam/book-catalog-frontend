@@ -24,6 +24,7 @@ import {
 import { useState } from 'react';
 import { Link, useParams } from 'react-router-dom';
 import BookCard from '../components/shared/BookCard';
+import AddReviewModal from '../components/ui/AddReviewModal';
 import DeleteConfirmationModal from '../components/ui/DeleteConfirmationModal';
 import EditBook from '../components/ui/EditBook';
 import useToken from '../hooks/useToken';
@@ -37,6 +38,11 @@ const BookDetails = () => {
   const token = useToken();
   const { books, searchBook } = useAppSelector((state) => state.book);
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isReviewOpen,
+    onOpen: onReviewOpen,
+    onClose: onReviewClose
+  } = useDisclosure();
   const [openEdit, setOpenEdit] = useState(false);
   const searchBooks = () => {
     const searchValue = searchBook?.toLowerCase();
@@ -52,6 +58,7 @@ const BookDetails = () => {
   };
   return (
     <>
+      <AddReviewModal id={id} isOpen={isReviewOpen} onClose={onReviewClose} />
       <DeleteConfirmationModal isOpen={isOpen} onClose={onClose} id={id} />
       <Box as='section' p={10}>
         <Card>
@@ -109,7 +116,7 @@ const BookDetails = () => {
                           Delete
                         </Button>
                         <Button
-                          onClick={onOpen}
+                          onClick={onReviewOpen}
                           colorScheme='facebook'
                           rightIcon={<SunIcon />}>
                           Give Review
