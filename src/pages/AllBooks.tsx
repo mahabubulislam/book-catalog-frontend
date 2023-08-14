@@ -4,10 +4,14 @@ import {
   AlertIcon,
   AlertTitle,
   Box,
+  Flex,
   Grid,
-  GridItem
+  GridItem,
+  Input,
+  Select,
+  Text
 } from '@chakra-ui/react';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import BookCard from '../components/shared/BookCard';
 import { useGetBooksQuery } from '../redux/api/bookApi';
 import { saveBooks } from '../redux/features/bookSlice';
@@ -15,7 +19,13 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 
 const AllBooks = () => {
   const { searchBook } = useAppSelector((state) => state.book);
-  const { data, isLoading } = useGetBooksQuery(searchBook);
+  const [date, setDate] = useState('');
+  const [genre, setGenre] = useState('');
+  const { data, isLoading } = useGetBooksQuery({
+    searchBook,
+    publicationDate: date,
+    genre
+  });
   const dispatch = useAppDispatch();
 
   const books = isLoading ? [] : data;
@@ -24,8 +34,28 @@ const AllBooks = () => {
       dispatch(saveBooks({ books: data }));
     }
   }, [isLoading, dispatch, data]);
+  const genres = ['Programming', 'Non-Programming', 'Romance', 'Frictions'];
+
   return (
-    <Box>
+    <Box p={10}>
+      <Flex flexDirection={{ base: 'column', md: 'row' }} gap={10} mb={5}>
+        <Box>
+          <Text>Filter By Genre</Text>
+          <Select
+            onChange={(e) => setGenre(e.target.value)}
+            placeholder='Select Genre'>
+            {genres?.map((genre, i) => (
+              <option key={`genre-${i}`} value={genre}>
+                {genre}
+              </option>
+            ))}
+          </Select>
+        </Box>
+        <Box>
+          <Text>Filter By Publication Year</Text>
+          <Input type='date' onChange={(e) => setDate(e.target.value)} />
+        </Box>
+      </Flex>
       {books?.length ? (
         <Grid
           templateColumns={{
@@ -33,7 +63,7 @@ const AllBooks = () => {
             md: 'repeat(2, 1fr)',
             xl: 'repeat(4, 1fr)'
           }}
-          gap={6}>
+          gap={4}>
           {books?.map((book) => (
             <GridItem key={book._id}>
               <BookCard book={book} />
@@ -54,8 +84,29 @@ const AllBooks = () => {
             Book not found
           </AlertTitle>
           <AlertDescription maxWidth='sm'>
-            No book found for this search keyword <strong>{searchBook}</strong>.
-            Try with different keywords. Try search with Title, Author or Genre
+            {!date && !genre && (
+              <Text>
+                No book found for this search keyword
+                <strong> {searchBook}</strong>. Try with different keywords. Try
+                search with Title, Author or Genre
+              </Text>
+            )}
+            {date && (
+              <Text>
+                No book found for this publication date
+                <strong>
+                  {' '}
+                  {new Date(date).toLocaleString().split(',')[0]}
+                </strong>
+                . Try with different dates.
+              </Text>
+            )}
+            {genre && (
+              <Text>
+                No book found for this genre
+                <strong> {genre}</strong>. Try with different genre.
+              </Text>
+            )}
           </AlertDescription>
         </Alert>
       )}

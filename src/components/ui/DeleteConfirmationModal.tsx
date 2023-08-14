@@ -31,10 +31,11 @@ const DeleteConfirmationModal = ({ isOpen, onClose, id }: IDeleteProps) => {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            Are you sure want to delete this Book? <WarningIcon />
+            <WarningIcon w={'sm'} color={'red'} />
+            Are you sure want to delete this Book?
           </ModalHeader>
           <ModalCloseButton />
-          <HStack p={5}>
+          <HStack pb={5} mx={'auto'}>
             <Button
               onClick={() => deleteBook(id)}
               colorScheme='red'
