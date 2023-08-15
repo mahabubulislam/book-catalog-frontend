@@ -4,9 +4,11 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { useEditBookMutation } from '../../redux/api/bookApi';
 import { IBook } from '../../types/book.interface';
 interface IProps {
@@ -14,6 +16,7 @@ interface IProps {
 }
 const EditBook = ({ book }: IProps) => {
   const [editBook, { data, isLoading }] = useEditBookMutation();
+  const toast = useToast();
   const formik = useFormik({
     initialValues: book,
 
@@ -21,7 +24,17 @@ const EditBook = ({ book }: IProps) => {
       editBook({ id: book._id, data: values });
     }
   });
-  console.log(data);
+  useEffect(() => {
+    if (data?.success) {
+      toast({
+        title: 'Book updated.',
+        description: data?.message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  }, [toast, data?.success, data?.message]);
   return (
     <Box flex={3}>
       <FormControl as={'section'} px={10} rounded={'md'}>

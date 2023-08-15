@@ -30,6 +30,7 @@ import EditBook from '../components/ui/EditBook';
 import useToken from '../hooks/useToken';
 import { useGetSingleBookQuery } from '../redux/api/bookApi';
 import { useAppSelector } from '../redux/hooks';
+import { IBook } from '../types/book.interface';
 
 const BookDetails = () => {
   const { id } = useParams();
@@ -48,7 +49,7 @@ const BookDetails = () => {
     const searchValue = searchBook?.toLowerCase();
 
     const filteredBooks = books.filter(
-      (book) =>
+      (book: IBook) =>
         book.title.toLowerCase().includes(searchValue as string) ||
         book.genre.toLowerCase().includes(searchValue as string) ||
         book.author.toLowerCase().includes(searchValue as string)
@@ -102,7 +103,7 @@ const BookDetails = () => {
                   </SkeletonText>
                   {token && (
                     <Skeleton isLoaded={!isLoading}>
-                      <Stack direction={'column'} mt={5} mb={2}>
+                      <Stack direction={'column'} mt={5}>
                         <Button
                           colorScheme='linkedin'
                           onClick={() => setOpenEdit(!openEdit)}
@@ -124,7 +125,7 @@ const BookDetails = () => {
                       </Stack>
                     </Skeleton>
                   )}
-                  <Stack>
+                  <Stack mt={2}>
                     <Button
                       as={Link}
                       to={'/'}

@@ -1,4 +1,5 @@
 import { createBrowserRouter } from 'react-router-dom';
+import Protected from '../HOC/Protected';
 import Layout from '../Layout';
 import AddNewBook from '../pages/AddNewBook';
 import AllBooks from '../pages/AllBooks';
@@ -26,7 +27,11 @@ const router = createBrowserRouter([
       {
         id: 'add-book',
         path: '/add-new-book',
-        element: <AddNewBook />
+        element: (
+          <Protected>
+            <AddNewBook />
+          </Protected>
+        )
       },
       {
         id: 'book-details',

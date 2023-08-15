@@ -9,10 +9,12 @@ import {
   ModalHeader,
   ModalOverlay,
   Text,
-  Textarea
+  Textarea,
+  useToast
 } from '@chakra-ui/react';
 
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { useAddReviewMutation } from '../../redux/api/bookApi';
 type IDeleteProps = {
   isOpen: boolean;
@@ -21,17 +23,27 @@ type IDeleteProps = {
 };
 const AddReviewModal = ({ isOpen, onClose, id }: IDeleteProps) => {
   const [addReview, { isLoading, data }] = useAddReviewMutation();
-
+  const toast = useToast();
   const formik = useFormik({
     initialValues: {
       review: ''
     },
-
     onSubmit: async (values) => {
       addReview({ id: id, data: values });
     }
   });
-  console.log(data);
+  useEffect(() => {
+    if (data?.success) {
+      toast({
+        title: 'Review added.',
+        description: data?.message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+      onClose();
+    }
+  }, [toast, data?.success, data?.message, onClose]);
   return (
     <>
       <Modal isOpen={isOpen} onClose={onClose}>

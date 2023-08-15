@@ -4,13 +4,17 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Text
+  Text,
+  useToast
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
+import { useEffect } from 'react';
 import { useCreateBookMutation } from '../redux/api/bookApi';
 import { IBook } from '../types/book.interface';
 
 const AddNewBook = () => {
+  const toast = useToast();
+
   const book: IBook = {
     title: '',
     author: '',
@@ -18,15 +22,33 @@ const AddNewBook = () => {
     img: '',
     publicationDate: ''
   };
-  const [createBook, { data, isLoading }] = useCreateBookMutation();
+  const [createBook, { isLoading, data }] = useCreateBookMutation();
+  console.log(data);
   const formik = useFormik({
     initialValues: book,
-
     onSubmit: async (values) => {
       createBook(values);
     }
   });
-  console.log(data);
+  useEffect(() => {
+    if (data?.success) {
+      toast({
+        title: 'Book created.',
+        description: 'Your book created successfully.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Oops!!!.',
+        description: 'Something went wrong, Please try again!',
+        status: 'error',
+        duration: 3000,
+        isClosable: true
+      });
+    }
+  }, [data?.success, toast]);
   return (
     <Box p={10}>
       <FormControl as={'section'} px={10} rounded={'md'}>
@@ -72,6 +94,7 @@ const AddNewBook = () => {
             placeholder='Publication Date'
             name='publicationDate'
             id='publicationDate'
+            type='date'
             value={formik.values.publicationDate}
             onChange={formik.handleChange}
           />

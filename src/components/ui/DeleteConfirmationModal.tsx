@@ -6,10 +6,10 @@ import {
   ModalCloseButton,
   ModalContent,
   ModalHeader,
-  ModalOverlay
+  ModalOverlay,
+  useToast
 } from '@chakra-ui/react';
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useDeleteBookMutation } from '../../redux/api/bookApi';
 type IDeleteProps = {
   isOpen: boolean;
@@ -17,13 +17,20 @@ type IDeleteProps = {
   id: string | undefined;
 };
 const DeleteConfirmationModal = ({ isOpen, onClose, id }: IDeleteProps) => {
-  const navigate = useNavigate();
   const [deleteBook, { isLoading, data }] = useDeleteBookMutation();
+  const toast = useToast();
   useEffect(() => {
     if (data?.success) {
-      navigate('/');
+      toast({
+        title: 'Book Deleted',
+        description: data?.message,
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+      onClose();
     }
-  }, [isLoading, data?.success, navigate]);
+  }, [isLoading, data?.success, toast, data?.message, onClose]);
 
   return (
     <>

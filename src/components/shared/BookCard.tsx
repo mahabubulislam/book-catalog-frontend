@@ -22,7 +22,10 @@ const BookCard = ({ book }: IProps) => {
       <CardBody pb={0}>
         <Image
           w={'50%'}
-          src={img}
+          src={
+            img ||
+            'https://angelbookhouse.com/assets/front/img/product/edition_placeholder.png'
+          }
           alt={title}
           borderRadius='lg'
           objectFit={'cover'}
