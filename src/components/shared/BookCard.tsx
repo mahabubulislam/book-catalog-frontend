@@ -13,7 +13,11 @@ import {
 } from '@chakra-ui/react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import useToken from '../../hooks/useToken';
-import { removeWishlist, saveWishlist } from '../../redux/features/bookSlice';
+import {
+  removeWishlist,
+  saveReadingList,
+  saveWishlist
+} from '../../redux/features/bookSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { IBook } from '../../types/book.interface';
 interface IProps {
@@ -22,14 +26,32 @@ interface IProps {
 const BookCard = ({ book }: IProps) => {
   const { title, img, genre, author, publicationDate, _id } = book;
   const dispatch = useAppDispatch();
-  const { wishlist } = useAppSelector((state) => state.book);
+  const { wishlist, readingList } = useAppSelector((state) => state.book);
   const toast = useToast();
   const token = useToken();
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const handleReadingList = () => {
     if (!token) {
-      return navigate('/login');
+      return navigate('/login', { state: 'protected' });
+    }
+    dispatch(saveReadingList(book));
+    if (!readingList.find((book) => book._id === _id)) {
+      toast({
+        title: 'Book Added.',
+        description: 'Book added to reading list successfully.',
+        status: 'success',
+        duration: 3000,
+        isClosable: true
+      });
+    } else {
+      toast({
+        title: 'Already in reading list.',
+        description: 'This Book already added to your reading list.',
+        status: 'warning',
+        duration: 3000,
+        isClosable: true
+      });
     }
   };
   const handleWishlist = (type: string) => {

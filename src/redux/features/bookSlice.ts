@@ -4,11 +4,13 @@ type IBooks = {
   books: Array<IBook>;
   searchBook: string;
   wishlist: Array<IBook>;
+  readingList: Array<IBook>;
 };
 const initialState: IBooks = {
   books: [],
   searchBook: '',
-  wishlist: []
+  wishlist: [],
+  readingList: []
 };
 const bookSlice = createSlice({
   name: 'book',
@@ -29,9 +31,28 @@ const bookSlice = createSlice({
       state.wishlist = state.wishlist.filter(
         (book) => book._id !== action.payload
       );
+    },
+    saveReadingList: (state, action: PayloadAction<IBook>) => {
+      if (!state.readingList.find((book) => book?._id === action.payload._id)) {
+        state.readingList.push(action.payload);
+      }
+      state.wishlist = state.wishlist.filter(
+        (book) => book._id !== action.payload._id
+      );
+    },
+    removeReadingList: (state, action: PayloadAction<string>) => {
+      state.readingList = state.readingList.filter(
+        (book) => book._id !== action.payload
+      );
     }
   }
 });
-export const { saveBooks, saveSearchBook, saveWishlist, removeWishlist } =
-  bookSlice.actions;
+export const {
+  saveBooks,
+  saveSearchBook,
+  saveWishlist,
+  removeWishlist,
+  saveReadingList,
+  removeReadingList
+} = bookSlice.actions;
 export default bookSlice.reducer;

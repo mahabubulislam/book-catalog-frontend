@@ -46,11 +46,12 @@ const Navbar = () => {
           </Flex>
         </MenuButton>
         <MenuList zIndex={9999} bg={'blue.900'}>
-          <MenuItem bg={'blue.900'}>Reading List</MenuItem>
+          <MenuItem bg={'blue.900'} as={Link} to={'/reading-list'}>
+            Reading List
+          </MenuItem>
           <MenuItem bg={'blue.900'} as={Link} to={'/wishlist'}>
             Wish List
           </MenuItem>
-          <MenuItem bg={'blue.900'}>Complete Read</MenuItem>
           <MenuItem bg={'blue.900'} as={Link} to={'/add-new-book'}>
             Add New Book
           </MenuItem>

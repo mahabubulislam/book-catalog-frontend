@@ -6,6 +6,7 @@ import AllBooks from '../pages/AllBooks';
 import BookDetails from '../pages/BookDetails';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
+import ReadingList from '../pages/ReadingList';
 import Register from '../pages/Register';
 import Wishlist from '../pages/Wishlist';
 
@@ -40,6 +41,15 @@ const router = createBrowserRouter([
         element: (
           <Protected>
             <Wishlist />
+          </Protected>
+        )
+      },
+      {
+        id: 'reading-list',
+        path: '/reading-list',
+        element: (
+          <Protected>
+            <ReadingList />
           </Protected>
         )
       },
