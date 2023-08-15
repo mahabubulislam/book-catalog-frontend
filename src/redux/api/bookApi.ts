@@ -3,7 +3,9 @@ import { IBook } from '../../types/book.interface';
 
 export const bookApi = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ baseUrl: 'http://localhost:5000/api' }),
+  baseQuery: fetchBaseQuery({
+    baseUrl: 'https://book-catalog-server-production-b2fc.up.railway.app/api'
+  }),
   tagTypes: ['Book'],
   endpoints: (builder) => ({
     getBooks: builder.query({
