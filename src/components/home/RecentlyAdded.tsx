@@ -13,6 +13,7 @@ import { useGetBooksQuery } from '../../redux/api/bookApi';
 import { saveBooks } from '../../redux/features/bookSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import BookCard from '../shared/BookCard';
+import Loading from '../shared/Loading';
 
 const RecentlyAdded = () => {
   const { searchBook } = useAppSelector((state) => state.book);
@@ -32,12 +33,29 @@ const RecentlyAdded = () => {
       <Text as={'h4'} fontSize={'3xl'} fontWeight={'bold'} mb={5}>
         Recently Added Books
       </Text>
-      {books?.length ? (
+      {isLoading ? (
         <Grid
           templateColumns={{
             base: 'repeat(1, 1fr)',
             md: 'repeat(2, 1fr)',
-            xl: 'repeat(4, 1fr)'
+            xl: 'repeat(3, 1fr)'
+          }}
+          gap={4}>
+          {[...Array(10)]?.map((_, i) => (
+            <GridItem key={`home-book-${i}`}>
+              <Loading />
+            </GridItem>
+          ))}
+        </Grid>
+      ) : (
+        <></>
+      )}
+      {books?.length && !isLoading ? (
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            xl: 'repeat(3, 1fr)'
           }}
           gap={6}>
           {books?.map((book) => (

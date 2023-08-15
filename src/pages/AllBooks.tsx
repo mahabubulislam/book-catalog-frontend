@@ -13,6 +13,7 @@ import {
 } from '@chakra-ui/react';
 import { useEffect, useState } from 'react';
 import BookCard from '../components/shared/BookCard';
+import Loading from '../components/shared/Loading';
 import { useGetBooksQuery } from '../redux/api/bookApi';
 import { saveBooks } from '../redux/features/bookSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
@@ -56,12 +57,29 @@ const AllBooks = () => {
           <Input type='date' onChange={(e) => setDate(e.target.value)} />
         </Box>
       </Flex>
-      {books?.length ? (
+      {isLoading ? (
         <Grid
           templateColumns={{
             base: 'repeat(1, 1fr)',
             md: 'repeat(2, 1fr)',
-            xl: 'repeat(4, 1fr)'
+            xl: 'repeat(3, 1fr)'
+          }}
+          gap={4}>
+          {[...Array(10)]?.map((_, i) => (
+            <GridItem key={`book-${i}`}>
+              <Loading />
+            </GridItem>
+          ))}
+        </Grid>
+      ) : (
+        <></>
+      )}
+      {books?.length && !isLoading ? (
+        <Grid
+          templateColumns={{
+            base: 'repeat(1, 1fr)',
+            md: 'repeat(2, 1fr)',
+            xl: 'repeat(3, 1fr)'
           }}
           gap={4}>
           {books?.map((book) => (
