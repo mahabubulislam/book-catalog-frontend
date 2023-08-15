@@ -1,4 +1,6 @@
 import {
+  Alert,
+  AlertIcon,
   Button,
   Container,
   FormControl,
@@ -8,7 +10,7 @@ import {
 } from '@chakra-ui/react';
 import { useFormik } from 'formik';
 import { useEffect, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useLoginUserMutation } from '../redux/api/userApi';
 import { saveUser } from '../redux/features/userSlice';
@@ -26,6 +28,9 @@ const Login = () => {
   const [loginUser, { data, isLoading, error }] = useLoginUserMutation();
   const { message } = (error as ErrorResponse) || {};
   const navigate = useNavigate();
+  const location = useLocation();
+  const isFromBtn = location.state;
+  const from: string = location.state?.from?.pathname || '/';
   const initialValues: IUserLogin = {
     email: '',
     password: ''
@@ -41,7 +46,7 @@ const Login = () => {
       const { token, user } = data.data;
       localStorage.setItem('token', token);
       dispatch(saveUser(user));
-      navigate('/');
+      navigate(from, { replace: true });
     }
     if (error) {
       setErrorMessage(message);
@@ -60,6 +65,14 @@ const Login = () => {
   return (
     <Container h={'80vh'} alignItems={'center'} display={'flex'}>
       <FormControl as={'section'} boxShadow={'xl'} p={10} rounded={'md'}>
+        {isFromBtn || from.includes('add') ? (
+          <Alert status='warning' rounded={'md'} my={5}>
+            <AlertIcon />
+            You must login first
+          </Alert>
+        ) : (
+          <></>
+        )}
         <Text
           color='teal'
           as={'h4'}

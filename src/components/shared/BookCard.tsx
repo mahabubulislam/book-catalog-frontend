@@ -1,4 +1,4 @@
-import { SmallAddIcon, ViewIcon } from '@chakra-ui/icons';
+import { MinusIcon, SmallAddIcon, ViewIcon } from '@chakra-ui/icons';
 import {
   Button,
   ButtonGroup,
@@ -11,7 +11,8 @@ import {
   Text,
   useToast
 } from '@chakra-ui/react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import useToken from '../../hooks/useToken';
 import { removeWishlist, saveWishlist } from '../../redux/features/bookSlice';
 import { useAppDispatch, useAppSelector } from '../../redux/hooks';
 import { IBook } from '../../types/book.interface';
@@ -23,8 +24,18 @@ const BookCard = ({ book }: IProps) => {
   const dispatch = useAppDispatch();
   const { wishlist } = useAppSelector((state) => state.book);
   const toast = useToast();
+  const token = useToken();
+  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const handleReadingList = () => {
+    if (!token) {
+      return navigate('/login');
+    }
+  };
   const handleWishlist = (type: string) => {
+    if (!token) {
+      return navigate('/login', { state: 'protected' });
+    }
     if (type === 'add') {
       dispatch(saveWishlist(book));
       if (!wishlist.find((book) => book._id === _id)) {
@@ -56,7 +67,7 @@ const BookCard = ({ book }: IProps) => {
     }
   };
   return (
-    <Card maxH={'lg'}>
+    <Card maxH={'lg'} maxW={'400px'}>
       <CardBody pb={0}>
         <Image
           w={'30%'}
@@ -91,24 +102,14 @@ const BookCard = ({ book }: IProps) => {
             Details
           </Button>
           {pathname.includes('wishlist') ? (
-            <>
-              <Button
-                size={'sm'}
-                onClick={() => handleWishlist('remove')}
-                rightIcon={<SmallAddIcon />}
-                variant='outline'
-                colorScheme='yellow'>
-                Remove from Wishlist
-              </Button>
-              <Button
-                size={'sm'}
-                onClick={() => handleWishlist('remove')}
-                rightIcon={<SmallAddIcon />}
-                variant='outline'
-                colorScheme='yellow'>
-                Mark as read
-              </Button>
-            </>
+            <Button
+              size={'sm'}
+              onClick={() => handleWishlist('remove')}
+              rightIcon={<MinusIcon />}
+              variant='outline'
+              colorScheme='yellow'>
+              Wishlist
+            </Button>
           ) : (
             <Button
               size={'sm'}
@@ -116,9 +117,17 @@ const BookCard = ({ book }: IProps) => {
               rightIcon={<SmallAddIcon />}
               variant='outline'
               colorScheme='blue'>
-              Add to Wishlist
+              Wishlist
             </Button>
           )}
+          <Button
+            size={'sm'}
+            onClick={handleReadingList}
+            rightIcon={<SmallAddIcon />}
+            variant='outline'
+            colorScheme='facebook'>
+            Reading list
+          </Button>
         </ButtonGroup>
       </CardFooter>
     </Card>
