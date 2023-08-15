@@ -31,7 +31,7 @@ const AllBooks = () => {
   const books = isLoading ? [] : data;
   useEffect(() => {
     if (data) {
-      dispatch(saveBooks({ books: data }));
+      dispatch(saveBooks(data));
     }
   }, [isLoading, dispatch, data]);
   const genres = ['Programming', 'Non-Programming', 'Romance', 'Frictions'];
@@ -72,7 +72,7 @@ const AllBooks = () => {
         </Grid>
       ) : (
         <Alert
-          status='error'
+          status='info'
           variant='subtle'
           width={'100%'}
           flexDirection='column'

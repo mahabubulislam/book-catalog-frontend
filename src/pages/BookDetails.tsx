@@ -140,7 +140,7 @@ const BookDetails = () => {
             </CardBody>
           ) : (
             <Alert
-              status='error'
+              status='info'
               variant='subtle'
               flexDirection='column'
               alignItems='center'

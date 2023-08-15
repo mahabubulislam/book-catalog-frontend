@@ -24,7 +24,7 @@ const RecentlyAdded = () => {
   const books = isLoading ? [] : data;
   useEffect(() => {
     if (data) {
-      dispatch(saveBooks({ books: data }));
+      dispatch(saveBooks(data));
     }
   }, [isLoading, dispatch, data]);
   return (
@@ -48,7 +48,7 @@ const RecentlyAdded = () => {
         </Grid>
       ) : (
         <Alert
-          status='error'
+          status='info'
           variant='subtle'
           width={'100%'}
           flexDirection='column'

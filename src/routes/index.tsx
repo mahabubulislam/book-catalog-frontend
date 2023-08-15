@@ -7,6 +7,7 @@ import BookDetails from '../pages/BookDetails';
 import Home from '../pages/Home';
 import Login from '../pages/Login';
 import Register from '../pages/Register';
+import Wishlist from '../pages/Wishlist';
 
 const router = createBrowserRouter([
   {
@@ -30,6 +31,15 @@ const router = createBrowserRouter([
         element: (
           <Protected>
             <AddNewBook />
+          </Protected>
+        )
+      },
+      {
+        id: 'wishlist',
+        path: '/wishlist',
+        element: (
+          <Protected>
+            <Wishlist />
           </Protected>
         )
       },
